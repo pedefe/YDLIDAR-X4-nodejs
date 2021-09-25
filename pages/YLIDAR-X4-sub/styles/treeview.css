@@ -1,0 +1,103 @@
+/*	treeview.css
+	*/
+
+/*ul, #myUL {*/
+.treeUL {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	}
+
+.lineUL {
+	list-style-type: none;
+	}
+	
+
+.caret {
+	cursor: pointer;
+	-webkit-user-select: none; /* Safari 3.1+ */
+	-moz-user-select: none; /* Firefox 2+ */
+	-ms-user-select: none; /* IE 10+ */
+	user-select: none;
+	}
+
+.caret::before {
+	content: "\25B6";
+	color: black;
+	display: inline-block;
+	margin-right: 6px;
+	}
+
+.caret-down::before {
+	-ms-transform: rotate(90deg); /* IE 9 */
+	-webkit-transform: rotate(90deg); /* Safari */
+	transform: rotate(90deg);  
+	}
+
+.nested {
+	display: none;
+	/*display: block;*/
+	}
+
+.active {
+	display: block;
+	}
+	
+/* for TREE VIEW */
+/* Remove default bullets */
+.myTreeViewNode {
+	list-style-type: none;
+		
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 600;
+	color: #0055a0;
+	text-align: left;
+	overflow: auto;
+}
+
+/* Remove margins and padding from the parent ul */
+.myTreeView {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 600;
+	color: #0055a0;
+	text-align: left;
+	overflow: auto;
+}
+
+/* Style the caret/arrow */
+.myTreeViewCaret {
+	cursor: pointer;
+	user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.myTreeViewCaret::before {
+	content: "\25B6";
+	color: black;
+	display: inline-block;
+	margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.myTreeViewCaret-down::before {
+	transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.myTreeViewNested {
+	display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.myTreeNodeActive {
+	display: block;
+}
+
+/*	end-treeview.css
+	*/

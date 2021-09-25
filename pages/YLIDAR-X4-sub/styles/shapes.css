@@ -1,0 +1,79 @@
+/*	shapes.css
+	*/
+
+.myShape {
+	background: white;
+	box-shadow: 3px 3px 3px 3px #888888;
+	}
+
+.myRounded4 {
+	border-radius: 4px;
+	}
+	
+.myInternalWholePage {
+	width: 100%;
+	height: 100%;
+	}
+	
+.myInternal {
+	width: 100%;
+	height: 97%;
+	}
+	
+.myInternalWidth {
+	width: 100%;
+	}
+	
+.myInternalHeight {
+	height: 100%;
+	}
+
+/* on utilise soit 
+	myCollapsibleContentClose pour une fentre fermée au départ
+	myCollapsibleContentOpen pour une fenetre déployée au départ
+	*/
+.myCollapsibleContentClose {
+	display: none;
+	overflow: hidden;
+	}
+	
+.myCollapsibleContentOpen {
+	display: block;
+	overflow: hidden;
+	}
+	
+.myExpandButton {
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+	background-color: transparent;
+	}
+
+.myMovingWindow {
+	position: absolute;
+	}
+	
+/* NOT USED ? */
+.flexContainer {
+	/*display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;*/
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 10px;
+	}
+
+.closeButton {
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+	display: block;
+	float: right;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	}
+/*	end-shapes.css
+	*/

@@ -1,0 +1,109 @@
+/*	border.css
+	*/
+	
+.myBorderAround {
+	border: solid 1px rgba(133, 132, 132, 0.486);
+	}
+
+.myTableCollapse {
+	border-collapse: collapse;
+	}
+
+.myCellBorderAll{
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	}
+
+.myCellBorderGridManager{
+	border: 1px solid rgba(255, 255, 255, 0);
+	}
+	
+.myCellHLeft{
+	text-align: left;
+	}
+	
+.myCellHRight{
+	text-align: right;
+	}
+	
+.myCellHCenter{
+	text-align: center;
+	}
+	
+/* toutes les cellules haut et bas */
+.myBorderUD {
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	border-left: none;
+	border-right: none;
+	}
+	
+.myBorderD {
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	}
+
+.myBorderR {
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	border-top: none;
+	border-bottom: none;
+	border-left: none;
+	}
+
+.myBorderL {
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+	}
+
+.myRowBorderU {
+	border-top: 1pt solid rgba(133, 132, 132, 0.486);
+	}
+
+.myRowBorderD {
+	border-bottom: 1pt solid rgba(133, 132, 132, 0.486);
+	}
+
+.myBorderNone{
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+	}
+	
+.myBorderUDLR {
+	border: 1px solid rgba(133, 132, 132, 0.486);
+	}
+	
+.myAlternateTR:nth-child(even) {
+  	background-color: #f2f2f2;
+	}
+
+.myVScroll {
+	/*overflow-y:scroll;*/
+	overflow-y: auto;    /* Trigger vertical scroll    */
+	overflow-x: hidden;  /* Hide the horizontal scroll */
+	}
+	
+/* pour le scroll du thead */
+.myTHS_1 {
+	position: sticky; 
+	top: 0;
+	}
+	
+/* pour le scroll du th */
+.myTHS_2 {
+	background-color: #ffffff;
+	position: sticky; 
+	top: 0;
+	box-shadow: inset 1px 1px #c4c3c3, 0 1px #c4c3c3;
+	}
+
+.myTBODY {
+	width: 100%;
+	overflow-y:scroll; 
+	overflow-x:hidden;
+	}
+/*	end-border.css
+	*/

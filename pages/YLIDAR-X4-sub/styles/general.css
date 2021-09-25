@@ -1,0 +1,224 @@
+/*	general.css
+	*/
+:root {
+	--main-font-size: 12px;
+	--main-font-family: 'Montserrat', sans-serif;
+  }
+
+html {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	}
+	
+body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	overflow:hidden;
+	}
+  
+.myArea {
+	box-shadow: 3px 3px 3px 3px #888888;
+	}
+	
+.myBackBlue {
+	background-color: #0055a0;
+	}
+	
+.myAreaCaption {
+	line-height: 26px;
+	text-align: center;
+	
+	background-color: #0055a0;
+	
+	/* myInternalWidth */
+	width: 100%;
+	
+	cursor: pointer;
+	}	
+	
+.myAreaCaptionText{
+	line-height: 26px;
+	font-family: var(--main-font-family);
+	font-size: 14px;
+	font-weight: 600;
+	margin: 0px 0 0;
+	/* decalage à gauche */
+	padding: 0 2px;
+	color: #FFF;
+	background-color: #0055a0;
+	text-align: center; /* left, center, right */
+	
+	/* myInternalWidth */
+	width: 100%;
+	
+	/* .noSelectableText */
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+	
+	cursor: move;
+	}	
+	
+.myAreaContainer {
+	overflow:auto;
+	}
+	
+.centerMyElem {
+	display: inline-block;
+	text-align: center;
+	}
+	
+.myAreaContainer2 {
+	display: inline-block;
+	position: sticky; 
+	top: 0;
+	}
+	
+.myItemLabel {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 600;
+	color: #0055a0;
+	text-align: right; /* left, center, right */
+	overflow: auto;
+	}
+	
+.myItemLabelLeft {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 600;
+	color: #0055a0;
+	text-align: left; /* left, center, right */
+	overflow: auto;
+	}
+	
+.myStdFont {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 600;
+	color: #0055a0;
+	}
+	
+.myItemValue {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 300;	
+	color: #0055a0;
+	text-align: center; /* left, center, right */
+	/*overflow: auto;*/
+	}	
+	
+.myItemInput {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 400;
+	color: #0055a0;
+	background-color: #ccffcc;
+	text-align: center; /* left, center, right */
+	/*overflow: auto;*/
+	}
+	
+.myItemInputRO {
+	font-family: var(--main-font-family);
+	font-size: var(--main-font-size);
+	font-weight: 400;
+	color: #0055a0;
+	background-color: #e0e0eb;
+	text-align: center; /* left, center, right */
+	/*overflow: auto;*/
+	}
+
+.myTextAlert {
+	background-color: orange;
+	color: #FFFFFF
+	}
+	
+.myTextUnknown {
+	background-color: 	gray;
+	color: 	red
+	}
+	
+.myListSelected {
+	background-color: #ccffee;
+	color: #0066ff
+	}
+	
+.noSelectableText {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+	}
+
+.myItemListSans {
+	/*font-family: 'Open Sans Light';*/
+	/*font-family: 'monospace';*/
+	font-family: 'Open Sans';
+	font-size: var(--main-font-size);
+	font-weight: 300;
+	color: #0055a0;
+	text-align: right; /* left, center, right */
+	overflow: auto;
+	}
+
+.myWholeFlex {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+	}
+
+.myWholeFlexFixed {
+	}
+
+.myWholeFlexRemaining {
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: auto;
+	}
+
+.myWholeFlexFooter {
+	/* fixer une taille */
+	flex-grow: 0;
+	flex-shrink: 0;
+	}
+
+.myBlock {
+	display: block;
+	}
+
+.myInlineBlock {
+	display: inline-block;
+	}
+
+.myTableCaption {
+	background-color: #ccffee;
+	color: #0066ff
+	}
+
+/* input capable de reccueillir les évènements mais invisible
+	*/
+.myInvisibleInput {
+	position: absolute; 
+	left: 0px; 
+	top: 0px; 
+	width: 0px; 
+	height: 0px; 
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+	}
+	
+.labelHCentered {
+	display:block;
+  width:auto;
+	}
+/*	end-general.css
+	*/

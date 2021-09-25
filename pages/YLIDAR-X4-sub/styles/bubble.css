@@ -1,0 +1,35 @@
+/*	bubble.css
+	2020-04-02, FPI
+	*/
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	/*width: 130px;*/
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+	
+	font-family: 'Montserrat', sans-serif;
+	font-size: 10;
+	font-weight: 300;
+	
+	opacity: 0;
+	transition: opacity 1s;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}

@@ -1,0 +1,26 @@
+/*	span.css
+	*/
+.myRoundedSpan {
+	border: solid 1px #808080;
+	color: var(--main-font-color);
+	display:inline-block;
+	height: 100%; 
+	padding-top: 2px; 
+	padding-bottom: 2px; 
+	padding-left: 3px; 
+	padding-right: 3px; 
+	border-radius: 5px;
+}
+
+.myRoundedSpanFullWidth {
+	border: solid 1px #808080;
+	color: var(--main-font-color);
+	display:inline-block;
+	height: 100%; 
+	padding-top: 2px; 
+	padding-bottom: 2px; 
+	padding-left: 3px; 
+	padding-right: 3px; 
+	border-radius: 5px;
+	width: calc(100% - 10px);
+	}

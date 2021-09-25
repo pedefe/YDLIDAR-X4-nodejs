@@ -1,0 +1,53 @@
+/*	resizeWindow.css
+	*/
+
+.myResizable .myResizers{
+	width: 100%;
+	/*height: 100%;*/
+	height: 0;
+	border: 0px solid #4286f4;
+	box-sizing: border-box;
+	}
+
+.myResizable .myResizers .myResizer{
+	width: 5px;
+	height: 5px;
+	border-radius: 50%; /*magic to turn square into circle*/
+	background: white;
+	border: 2px solid #4286f4;
+	position: absolute;
+	}
+	
+.myResizable .myResizers .myResizer.min-max {
+	right: -5px;
+	top: -5px;
+	cursor: pointer; /*resizer cursor*/
+	border-radius: 10%;
+	background: white;
+	border: 2px solid #66ff66;
+	}
+	
+.myResizable .myResizers .myResizer.top-left {
+	left: -5px;
+	top: -5px;
+	cursor: nwse-resize; /*resizer cursor*/
+	}
+
+.myResizable .myResizers .myResizer.top-right {
+	right: -5px;
+	top: -5px;
+	cursor: nesw-resize;
+	}
+
+.myResizable .myResizers .myResizer.bottom-left {
+	left: -5px;
+	bottom: -5px;
+	cursor: nesw-resize;
+	}
+
+.myResizable .myResizers .myResizer.bottom-right {
+	right: -5px;
+	bottom: -5px;
+	cursor: nwse-resize;
+	}
+
