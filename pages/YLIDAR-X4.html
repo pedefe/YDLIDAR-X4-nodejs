@@ -1,0 +1,311 @@
+<!doctype html>
+<!--
+	YLIDAR-X4.html
+	Version : rechercher 'idPageRelease' dans ce qui suit pour raffraichir le n° de version sur la page d'accueil
+	- html + javascript
+	- page web d'accueil d'YLIDAR
+	
+	MARKERS:
+	- WSEventProcessing : traitement des messages recus sur la ws;
+	*/
+-->
+<!-- dernieres modifs :
+	2021-09-22, FPI
+		> creation
+-->
+<!-- todo : 
+-->
+<html lang="fr">
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="description" content="Interface de pilotage d'YLIDAR-X4">
+    <meta name="keywords" content="FPI YLIDAR-X4">
+    <meta name="author" content="FPI Dream Team">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title id="id001">YLIDAR-X4</title>	
+		
+		<!-- general modules -->
+		<script src="./YLIDAR-X4-sub/scripts/jquery.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/canvas-arrow.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/jquery-confirm.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/utils.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/pageDefault.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/GridManager.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/dragWindow.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/collapseWindow.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/makeResizableDiv.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/makeMinMaxDiv.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/setCloseButton.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/zindex.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/makeOnTop.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/standardWin.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/ListManager.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/Lang.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/BitmapLib.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/jquery.ba-resize.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/manageSettings.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/HttpInterface.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/WholeAppManagement.js"></script>
+
+		<!-- Forms modules -->
+		<script src="./YLIDAR-X4-sub/scripts/Lang.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/Logs.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/AppTools.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/WSCon.js"></script>
+		<script src="./YLIDAR-X4-sub/scripts/YLIDAR_X4.js"></script>
+		
+		<!-- styles -->
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/jquery-confirm.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/borders.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/button.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/colors.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/cursors.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/fonts.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/general.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/shapes.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/sideBar.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/resizeWindow.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/switchAndSlide.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/formattedJson.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/bubble.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/sideNav.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/splash.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/span.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/treeview.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/dropdown.css" type="text/css">
+		<link rel="stylesheet" href="./YLIDAR-X4-sub/styles/image.css" type="text/css">
+
+		<link rel="shortcut icon" href="/favicon.ico" rel="icon" type="image/x-icon" />
+	</head>
+ 
+	<body>
+		<div id='splashBadUser' class='splashScreen' style='visibility: hidden; display: flex; align-items: center;	justify-content: center'>
+			<label id='splashCaption' style='cursor: pointer;'>Accès non autorisé</label>
+		</div>
+		<span style='position: absolute; z-index: 99999;' >
+			<input type="button" class="myBorderNone" onclick="openMainMenu()" style="background: url('./YLIDAR-X4-sub/medias/3bar_menu.png'); background-size: 25px 25px; background-repeat: no-repeat; width: 30px; height: 30px; cursor: pointer;"  title='Menu'></input>
+			<div id="mainMenu" class="sidenav myItemLabel myBackBlue" style='text-align: left;'>
+				<span>
+					<a href="javascript:void(0)" class="closebtn" onclick="closeMainMenu()">&times;</a>
+					<img class="menuLogoBtn" src='./YLIDAR-X4-sub/medias/FPI.jpg' style='width:40px; height:40px;'></img>
+					<a id='AppRelease' href='#'>-</a>
+				</span>							
+				<a name='sepHoriz1' class='myBorderD' style='border-color: white;'></a>
+				<a name='EndAll' onclick='endAll();' href='#' title='ctrl+q'>EndAll</a>
+				<a name='YLIDAR-X4' onclick='openMainMenuOption(this);' href='#'>YLIDAR-X4</a>
+				<a name='sepHoriz2' class='myBorderD' style='border-color: white;'></a>
+				<a name='AppTools' onclick='openMainMenuOption(this);' href='#' title='ctrl+u'>Interface Utilisateur</a>
+				<a name='AppToolsSave' onclick='saveViewsPositions(this);' href='#' title='ctrl+s'>Sauvegarde des Vues</a>
+			</div>
+		</span>
+		<div id='wholePage' class='myInternalWholePage' style="background-color: yellow;">
+		</div>
+	</body>
+
+	<script language="javascript" type="text/javascript">
+		
+		var _idPageRelease = "2020-09-03.15h00";
+		
+		var _timerScanHeading = null;
+		var _timerScanHeadingPeriod = 1000;
+		
+		var _timerScanCPU = null;
+		var _timerScanCPUPeriod = 5000;
+		
+		var _YLIDAR_X4;
+				
+		WholeAppManagement_Init( "./YLIDAR-X4-sub");
+		
+		/*
+			*/
+		$(document).ready( function() {
+			// 1
+			$("#AppRelease").text( "release " + _idPageRelease);
+			
+			WholeAppManagement_DocumentReady();
+			
+			_YLIDAR_X4 = new YLIDAR_X4( _ressourcePath, $("#wholePage")[0], "id_YLIDAR_X4", "gridMg1", undefined);
+			declareModule( _YLIDAR_X4);
+						
+			_WSCon = new WSCon( WSEventProcessing);
+			
+			});
+			
+		/*
+			*/
+		$(window).load( function() {
+			// 3
+
+			WholeAppManagement_WindowLoad();
+			
+			_WSCon.start();
+			
+			initializeViews();
+			});
+			
+		/*
+			*/
+		$(window).ready( function() {
+			// 2
+			WholeAppManagement_WindowReady();
+			});
+
+		/* resize de la fenêtre
+			*/
+		window.onresize = function() {
+			// force le dessin de tout ce qui contient une carte
+			if (_YLIDAR_X4) _YLIDAR_X4.triggerResize();
+			};
+
+		/*
+			*/
+		function switchWinDisplay( winName) {
+		
+			let obj = getAppFromName( winName);			
+			if (obj) {
+				if (obj.show) {
+					if (obj.isClosed()) {
+						obj.show( true);
+						setWinOnTop( obj.divWin);
+						}
+					else {
+						obj.show( false);
+						}
+					}
+				}
+			}
+			
+		/*
+			*/
+		$(window).on( 'click', function( evt) {
+			let menuWidth = parseInt( window.getComputedStyle( document.getElementById("mainMenu"))["width"].replaceAll('px',''));
+			
+			if (menuWidth > 0) {
+				closeMainMenu();
+				}
+			});
+			
+		/*
+			*/
+		$(window).bind('keydown', function(event) {
+
+			if (event.ctrlKey || event.metaKey) {
+				let theChar = String.fromCharCode(event.which).toLowerCase();
+				// console.log( `theChar: ${theChar}`);
+				switch ( theChar) {
+					// SavePositions
+					case 's': {
+						event.preventDefault();
+						_Logs.log( `save Views Positions...`);
+						saveViewsPositions($(window)[0]);
+						_Logs.log( `save Views Positions done.`);
+						break;
+						}
+					// AppTools
+					case 'u': {
+						event.preventDefault();
+						switchWinDisplay( "AppTools");
+						break;
+						}
+					// Logs
+					case 'l': {
+						event.preventDefault();
+						switchWinDisplay( "Logs");
+						break;
+						}
+					}
+				}
+			});
+
+		/*
+			*/
+		function initializeViews() {
+
+			}
+		
+		/*
+			*/
+		function WSEventProcessing_connection( jsn) {
+			
+			// indique la nature de l'interface sw
+			_WSCon.send( { origin: "HMI", destin: "WSClientInterface", cmd: "WSClient.isHMI" } );			
+			}
+		
+		/*
+			*/
+		function WSEventProcessing_disconnection( jsn) {
+			if (jsn.messageCount > 0) {
+				
+				}
+			}
+		
+		/*
+			*/
+		function WSEventProcessing_reception( jsn) {
+			let funcName = "WSEventProcessing_reception";
+			
+			do  {
+				if ( ! jsn.commMsg) {
+					log( `${funcName} > data is null.`);
+					break;
+					}
+				
+				switch( jsn.commMsg.event) {
+					case "system.connect": {	
+
+						break;
+						}
+						
+					case "YLIDAR-X4.detections": {	
+						if (_YLIDAR_X4) _YLIDAR_X4.receiveDetections( jsn.commMsg );
+						break;
+						}
+						
+					default: {
+						log( `${funcName} > unprocessed data:` + JSON.stringify( jsn));
+						}
+					}
+				}
+			while( false);
+			}
+			
+		/*
+			*/
+		function WSEventProcessing( jsn) {
+			let funcName = "WSEventProcessing";
+			
+			switch (jsn.commEvent) {
+				case "connection": {
+					WSEventProcessing_connection( jsn);
+					break;
+					}
+				
+				case "disconnection": {
+					WSEventProcessing_disconnection( jsn);
+					break;
+					}
+				
+				case "reception": {
+					WSEventProcessing_reception( jsn);
+					break;
+					}
+					
+				default: {
+					console.log( `${funcName} > receive unknown message step ${jsn.commEvent}`);
+					break;
+					}
+				}
+			}
+			
+		/*
+			*/
+		function endAll() {
+			if (_WSCon) {
+				_WSCon.send( { destin: 'System', cmd: 'end' } );
+				}
+			closeMainMenu();
+			}
+
+	</script>
+</html>
