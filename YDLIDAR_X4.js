@@ -1,5 +1,4 @@
-/*	YDLIDAR_X4.js
-	FPI, 2021-09-22
+/*	YDLIDAR_X4.js2622
 	Translated from "lidar.py"
 	*/
 	
@@ -55,24 +54,37 @@ function hasSubArray(master, sub) {
 	return false;
 }
 
-/**/
-function findSubArray(master, sub, fromPos) {
-	let i =  fromPos >>> 0;
-	let sl = sub.length;
-	let l = master.length + 1 - sl;
-
-	loop: for (; i < l; i++) {
-		for( let j=0; j < sl; j++) {
-			if (master[i+j] !== sub[ j]) {
-				continue loop;
+/*
+	*/
+function findSubArray( master, sub, fromPos) {
+	let pos = null;
+	if ( ! fromPos) fromPos = 0;
+	
+	do {
+		if (master.length < sub.length) break;
+		if (fromPos > (master.length - sub.length)) break;
+		
+		for( m=fromPos; m < (master.length - sub.length); m++) {
+			
+			let masterPos = m;
+			for( s=0; s < sub.length; s++) {
+				if (sub[s] != master[m + s]) {
+					masterPos = -1;
+					break;
+				}
 			}
-			return i;
+			if (masterPos != -1) {
+				pos = masterPos;
+				break;
+			}
 		}
-	}
-	return -1;
+	} while( false);
+	return pos;
 }
 
-/**/
+
+/*
+	*/
 function log(txt) {
 	console.log( new Date().yyyymmddhhmmsslll() + ` > YLIDAR_X4 > ${txt}`);
 }
@@ -163,30 +175,66 @@ var lidarCommand = ( params) => new Promise( resolve => {
 	resolve( { err: undefined, result: { stamp: new Date(), params: params } } );
 });
 
+log( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+/* convert 2 bytes sequences in byte1 + byte2 * 256 
+	*/
 function HexArrToDec( block) {
+	const funcName = "HexArrToDec";
+	// log( `${funcName} > begin...`);
+	
+	/*
 	let littleEndianVal = 0;
 	for( let i=0; i < block.length; i++) { 
 		littleEndianVal = littleEndianVal + block[ i] * Math.pow( 256, i);
 	}
-	return littleEndianVal;
+	log( `${funcName} > littleEndianVal: ${littleEndianVal}`);*/
+	
+	let littleEndianVal2 = 0;
+	try {
+		let buf = Buffer.from( block, 'utf-8');
+		/*let strHex = "";
+		buf.forEach( b => { 
+			strHex += "0x" + b.toString(16).toUpperCase() + " "; 
+		});
+		log( `${funcName} > len: ${buf.length}, strHex: ${strHex}`);*/
+		
+		littleEndianVal2 = buf.readIntLE( 0, block.length);
+		// if (littleEndianVal != littleEndianVal2) {
+		// log( `${funcName} > littleEndianVal: ${littleEndianVal}, littleEndianVal2: ${littleEndianVal2}`);
+		// }
+	} catch( err) {
+		log( `${funcName} > err: ${err}`);
+	}
+	
+	return littleEndianVal2;
 }
 
+/* compute checksum on frame
+	*/
 function computeChecksum( block) {
+	const funcName = "computeChecksum";
+	
 	let isValid = false;
 	try {
-		let ocs = HexArrToDec( [ block[6], block[7] ] );
+		let frameCs = HexArrToDec( [ block[6], block[7] ] );
 		let LSN = block[ 1];
-		let cs = 0x55AA ^ HexArrToDec( [ block[0], block[1] ] ) ^ HexArrToDec( [block[2], block[3] ] ) ^ HexArrToDec( [block[4], block[5] ] );
-		for( let i = 0; i < 2 * LSN; i+= 2) {
-			cs = cs ^ HexArrToDec( [ block[ 8+i], block[ 8+i+1] ] );
+		
+		let computedCs = 0x55AA ^ HexArrToDec( [ block[0], block[1] ] ) ^ HexArrToDec( [block[2], block[3] ] ) ^ HexArrToDec( [block[4], block[5] ] );
+		for( let i = 0; i < (2 * LSN); i+= 2) {
+			computedCs = computedCs ^ HexArrToDec( [ block[ 8+i], block[ 8+i+1] ] );
 		}
-		if(cs == ocs) {
+		
+		if (computedCs == frameCs) {
 			isValid = true;
+			// log( `${funcName} > valid checkSum > frameCs: ${frameCs}, computedCS: ${computedCs}, LSN: ${LSN}`);
 		} else {
 			isValid = false;
+			log( `${funcName} > bad checkSum > frameCs: ${frameCs}, computedCS: ${computedCs}, LSN: ${LSN}`);
+			log( `${funcName} > bad checkSum > block[6]: ${block[6]}, block[7]: ${block[7]}`);
 		}
 	} catch( err) {
 		//nop
+		log( `${funcName} > err: ${err}`);
 	}
 	return isValid;
 }
@@ -213,7 +261,7 @@ function AngleCorr( dist) {
 	return angleDegree;
 }
 
-/*
+/* compute mean of values of an array
 	*/
 function computeMean( arr) {
 	if ( ! arr
@@ -272,17 +320,9 @@ function convertBlock( block) {
 	for (let i = 0; i < 2 * LSN; i += 2) {
 		
 		let dist_i = HexArrToDec( [block[8+i],block[8+i+1]]) / 4;
-		// let Angle_i_tmp = ( ( Angle_diff / parseFloat( LSN) ) * (i/2)) + Angle_fsa + AngleCorr( dist_i);
-		let Angle_i_tmp = ( ( Angle_diff / parseFloat( LSN-1) ) * ((i/2)-1)) + Angle_fsa + AngleCorr( dist_i);
 		
-		/*let Angle_i;
-		if (Angle_i_tmp > 360) {
-			Angle_i = Angle_i_tmp - 360
-		} else if (Angle_i_tmp < 0) {
-			Angle_i = Angle_i_tmp + 360;
-		} else {
-			Angle_i = Angle_i_tmp;
-		}*/
+		let Angle_i_tmp = ( ( Angle_diff / parseFloat( LSN-1) ) * ((i/2)-1)) + Angle_fsa + AngleCorr( dist_i);
+
 		let Angle_i = Angle_i_tmp % 360;
 		if (Angle_i < 0) {
 			Angle_i += 360;
@@ -293,6 +333,16 @@ function convertBlock( block) {
 	return ddict;
 }
 	
+/*
+	*/
+function logBuffer( funcName, title, buf) {
+	let strHex = "";
+	buf.forEach( b => { 
+		strHex += "0x" + b.toString(16).toUpperCase() + " "; 
+	});
+	log( `${funcName} > ${title} > len: ${buf.length}, strHex: ${strHex}`);
+}
+
 /*
 	*/
 function processLidarAnswer( data) {
@@ -309,13 +359,15 @@ function processLidarAnswer( data) {
 		strHex += "0x" + b.toString(16).toUpperCase() + " "; 
 	});
 	log( `${funcName} > len: ${buf.length}, strHex: ${strHex}`);*/
+	// logBuffer( funcName, "received frame", buf);
+
 	
 	if (lidarDevice.currentCmd != null) {
 		lidarDevice.lidarBuffer = Buffer.concat( [ Buffer.from( lidarDevice.lidarBuffer), buf]);
 	} else {
 
 		log( `${funcName} > !!!! data received out of command > len: ${buf.length} > purged`);
-		// lidarDevice.lidarBuffer = Buffer.from( []);
+		lidarDevice.lidarBuffer = Buffer.from( []);
 	}
 	
 	let bufferProcessed = false;
@@ -391,8 +443,14 @@ function processLidarAnswer( data) {
 			|| hasSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55, 0x01 ])) {
 			// log(`${funcName} > recognize 'data from scan'...`);
 			if (lidarDevice.currentCmd == "scan") {
+				
 				let pos = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], 0);
 				// log(`${funcName} > data case > pos=${pos}`);
+				if (pos != 0) {
+					log(`${funcName} > data case > DOES'N START at ZZZZZZZZZZZERO > pos=${pos}`);
+					logBuffer( funcName, "found scan frame", lidarDevice.lidarBuffer);
+				}
+				
 				// cloud or zero packet
 				let type = lidarDevice.lidarBuffer[3];
 				let sampleCount = lidarDevice.lidarBuffer[4];
@@ -400,21 +458,21 @@ function processLidarAnswer( data) {
 				
 				let nextPos = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], pos + 2);
 				// log(`${funcName} > data case > nextPos=${nextPos}`);
-				if (nextPos == -1) {
+				if (nextPos == null) {
 					// log(`${funcName} > data case > uncompled packet`);
 					return;
 				}			
 				
 				// un packet complet
-				let block = lidarDevice.lidarBuffer.slice( 0, nextPos);
+				let block = lidarDevice.lidarBuffer.slice( pos, nextPos);
 				if (block[ 2] == 0x00) {
 					// log(`${funcName} > data case > full measures TO PROCESS...`);
-					// remove strta of answer
-					block = block.slice( 2);
+					// remove 2 thirst bytes of answer
+					let block2 = block.slice( 2);
 					
-					if (computeChecksum( block)) {
+					if (computeChecksum( block2)) {
 						// log(`${funcName} > data case > good checksum...`);
-						let converted = convertBlock( block);
+						let converted = convertBlock( block2);
 						// log(`${funcName} > data case > converted.length: ${converted.length}...`);
 						converted.forEach( elem => {
 							angle = ~~ elem.angle;
@@ -440,7 +498,9 @@ function processLidarAnswer( data) {
 						
 						
 					} else {
-						log(`${funcName} > data case > BAD checksum !`);
+						// log(`${funcName} > data case > BAD checksum !`);
+						logBuffer( funcName, "BAD CHECKSUM > block > ", block);
+						logBuffer( funcName, "BAD CHECKSUM > lidarDevice.lidarBuffer > ", lidarDevice.lidarBuffer);
 					}
 				}
 				
@@ -454,13 +514,15 @@ function processLidarAnswer( data) {
 				let pos2 = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], 0);
 				// log(`${funcName} > data case > pos2: ${pos2}`);
 			} else {
-				log(`${funcName} > data case 2 > lidarDevice.currentCmd: ${lidarDevice.currentCmd}`);
+				log(`${funcName} > data case 2 > lidarDevice.currentCmd: ${lidarDevice.currentCmd}, but received 'scan data'`);
 				
-				let pos = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], 0);
+				lidarDevice.lidarBuffer = Buffer.from( []);
+				
+				/*let pos = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], 0);
 				// log(`${funcName} > data case 2 > pos: ${pos}`);
 				let nextPos = findSubArray( lidarDevice.lidarBuffer, [0xAA, 0x55 ], pos + 2);
 				// log(`${funcName} > data case 2 > nextPos: ${nextPos}`);
-				lidarDevice.lidarBuffer = lidarDevice.lidarBuffer.slice( nextPos);
+				lidarDevice.lidarBuffer = lidarDevice.lidarBuffer.slice( nextPos);*/
 			}
 		} else {
 			// log(`${funcName} > other frame report !!!!!!!!!!!!!!!!!!!!!! > empty buffer`);
